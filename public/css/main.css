@@ -1,0 +1,164 @@
+body{
+    background: #e8e8e8 ;
+}
+a{
+    color:#3d3d3d;
+    text-decoration: none;
+    cursor: pointer;
+}
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color:#3d3d3d;
+}
+
+a:active {
+    text-decoration: none;
+}
+.navbar{
+    border-radius: 10px;
+    box-shadow:   0 0 5px #000000;
+}
+.nav-item{
+    margin: 0 5px;
+    background: #F29200;
+    border-radius: 10px;
+}
+.nav-item a{
+    font-size: 14px;
+    font-weight: 400;
+}
+.main{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 20px;
+
+}
+.nav {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 20%;
+    height: 100vh;
+    border-right: solid 2px #6d6d6d;
+
+
+}
+.nav a{
+    padding: 5px 0;
+    color: #177C80;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+.content{
+    margin-left: 5vh;
+    flex-basis: 70%;
+}
+
+.avatar-image{
+    width:150px;
+    height:150px;
+    border-radius: 100px;
+}
+.info{
+    text-align: center;
+    font-size: 14px;
+
+}
+.name{
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+
+}
+.tags{
+    display: flex;
+}
+.tag{
+    flex-direction: row;
+    margin: 20px 5px;
+
+}
+.tag a{
+    padding: 5px;
+    background: #E8941A;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.title-block{
+    display: flex;
+    align-items: center;
+
+}
+/*.edit-link{*/
+/*    margin-left: 10px;*/
+
+/*}*/
+.edit-link a{
+    padding: 5px;
+    font-size: 1rem;
+    text-align: center;
+    margin-right: 10px;
+    background: #575556;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    color: #fff;
+}
+.edit-link a:hover{
+    color: #fff;
+    text-decoration: none;
+    background: #5a6268;
+    transition: 0.3s;
+}
+.title {
+    margin-right: 20px;
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 20%;
+    height: 100vh;
+    border-right: solid 2px #6d6d6d;
+}
+.gallery-title{
+    margin: 0 20px 20px;
+}
+.delete-link{
+    margin-left: 20px;
+}
+
+.gallery-image{
+    width:100%;
+    height: 100%;
+
+}
+.gallery-image:hover{
+    filter: brightness(80%);
+    cursor: pointer;
+}
+
+.image-part{
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    align-items: center;
+}
+.image{
+    width: 100%;
+    height: auto;
+}
+
+
+
