@@ -23,7 +23,7 @@
             <a target="_blank" href="{{asset("storage/uploads/gallery/$image->title")}}"><img alt="picture-show" src="{{asset("storage/uploads/gallery/$image->title")}}" class="image"></a>
             <p>Created at: {{$image->created_at}} by: <a href="">{{$image->gallery->users->name}}</a></p>
             <div class="image-description">
-                <p>{{$image->alt}}</p>
+                <p>{!! $image->alt !!}</p>
             </div>
             <div class="tags">
                 {{--        {{dd($article->tags)}}--}}

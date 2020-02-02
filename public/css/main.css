@@ -61,6 +61,7 @@ a:active {
 .content{
     margin-left: 5vh;
     flex-basis: 70%;
+
 }
 
 .avatar-image{
@@ -159,6 +160,48 @@ a:active {
     width: 100%;
     height: auto;
 }
+
+.blog-main{
+    margin: auto;
+    width:80%;
+
+}
+
+.blog-index{
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 30px;
+
+}
+.blog-nav{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+
+}
+.blog-link{
+    padding: 5px;
+    margin: 0 20px;
+    background-color: #f6993f;
+    border-radius: 10px;
+    color: #fff;
+
+}
+
+.blog-show{
+    width: 80%;
+    margin: auto;
+}
+.pagination-links{
+
+
+
+}
+
+
+
+
 
 
 

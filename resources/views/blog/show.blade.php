@@ -2,14 +2,14 @@
 
 @section('content')
 
-    <div class="article">
+    <div class="blog-show">
         <div class="title-block">
-        <h1 class="title">{{$article->title}}</h1>
+        <h1 class="title">{{$blog->title}}</h1>
             @auth
-                @can('owner-or-admin',$article->user_id)
-        <div class="edit-link"><a href="{{route('articles.edit', $article)}}">Edit</a></div>
+                @can('owner-or-admin',$blog->user_id)
+        <div class="edit-link"><a href="{{route('blog.edit', $blog)}}">Edit</a></div>
                 <div class="delete-link">
-                    <form action="{{route('articles.destroy', $article)}}" method="POST">
+                    <form action="{{route('blog.destroy', $blog)}}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete article</button>
@@ -18,10 +18,10 @@
                 @endcan
             @endauth
         </div>
-        <p>Created at: {{$article->created_at}} by <a href="{{route('users.profile.showProfile',$article->users->name)}}">{{$article->users->name}}</a></p>
-        <div class="article-content">{!!$article->content!!}</div>
-    </div>
-    @isset($gallery))
+        <p>Created at: {{$blog->created_at}} by <a href="{{route('users.profile.showProfile',$blog->users->name)}}">{{$blog->users->name}}</a></p>
+        <div class="article-content">{!!$blog->blog_content!!}</div>
+
+    @isset($gallery)
     <div class="gallery">
 
         <div class="row col-sm-12">
@@ -38,10 +38,28 @@
     @endisset
     <div class="tags">
 
-        @foreach($article->tags as $tag)
+        @foreach($blog->tags as $tag)
 
         <div class="tag" id="tag"><a href="{{route('articles.tag.showByTag', $tag->name)}}">{{$tag->name}}</a></div>
             @endforeach
     </div>
+        <div class="interaction">
+{{--            <a href="#" class="like" data-id="{{$blog->id}}">{!! Auth::user()->likes()->where('blog_id',$blog->id)->first() ?Auth::user()->likes()->where('blog_id',$blog->id)->first()->like==1?'<i class="fa fa-thumbs-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>'!!}Like</a>--}}
+            <a href="#" onclick="auth({{Auth::user()}})" class="like" data-id="{{$blog->id}}">{!! $like===1?'<i class="fa fa-thumbs-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>' !!}Like</a>
+            <a href="#" onclick="auth({{Auth::user()}})" class="like" data-id="{{$blog->id}}">{!! $like===0?'<i class="fa fa-thumbs-down" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>' !!}Like</a>
 
+        </div>
+
+
+    </div>
 @endsection
+@section('js')
+    @parent
+    <script src="{{asset('/js/like.js')}}"></script>
+    <script type="text/javascript">
+        var token="{{ csrf_token() }}";
+        var urlLike = '{{route('addLike')}}';
+
+
+    </script>
+@stop

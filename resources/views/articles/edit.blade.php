@@ -43,17 +43,22 @@
                                 <input type="hidden" value="0" name="only-for_registered">
                                 <input type="checkbox" name="only_for_registered" id="for-registered" @if($article->is_auth===1) checked @endif>
                             </div>
+
                             <div class="form-group row">
                                 <label for="gallery" class="col-md-2 col-form-label">Select gallery: </label>
+
                                 <div class="col-md-8">
                                     <select name="selected_gallery" class="custom-select">
                                         <option value="" selected>Choose...</option>
-                                        @foreach($galleries as $gallery)
-                                        <option value="{{$gallery->id}}">{{$gallery->name}}</option>
+                                        @isset($galleries)
+                                            @foreach($galleries as $gallery)
+                                                <option value="{{$gallery->id}}">{{$gallery->name}}</option>
                                             @endforeach
+                                        @endisset
                                     </select>
                                 </div>
                             </div>
+
 
                             <button type="submit" class="btn btn-primary float-right">Update</button>
 
@@ -69,4 +74,14 @@
     </div>
 
 @endsection
-
+<script type="text/javascript">
+    // setTimeout(function() {
+    //     CKEDITOR.replace('content');
+    // },100);
+    function editor() {
+        CKEDITOR.replace('article_content');
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        editor();
+    });
+</script>

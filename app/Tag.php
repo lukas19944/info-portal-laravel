@@ -15,4 +15,7 @@ class Tag extends Model
     public function images(){
         return $this->belongsToMany('App\Image','images_tag');
     }
+    public function blogs(){
+        return $this->belongsToMany('App\Blog');
+    }
 }

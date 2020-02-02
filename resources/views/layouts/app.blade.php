@@ -11,17 +11,16 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     @section('js')
     <!-- Scripts -->
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
-
-
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
     @show
 
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     @section('css')
@@ -103,17 +102,7 @@
         </main>
     </div>
 
-    <script type="text/javascript">
-        // setTimeout(function() {
-        //     CKEDITOR.replace('content');
-        // },100);
-        function editor() {
-            CKEDITOR.replace('article_content');
-        }
-        document.addEventListener("DOMContentLoaded", function () {
-            editor();
-        });
-    </script>
+
 </body>
 
 </html>

@@ -62,4 +62,9 @@ Route::prefix('gallery/{gallery_name}/image')->name('image.')->group(function ()
 
 Route::resource('/image', 'Gallery\ImagesController',['except'=>['index','edit','show']]);
 
+Route::resource('/blog', 'blog\BlogController');
+
+
+Route::post('/like', 'LikeController@addLike')->name('addLike');
+
 
