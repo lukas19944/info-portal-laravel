@@ -61,10 +61,17 @@ class User extends Authenticatable
     public function articles(){
         return $this->hasMany('App\Article');
     }
-    public function likes(){
-        return $this->hasMany('App\Like');
+    public function bloglikes(){
+        return $this->hasMany('App\BlogLikes');
+    }
+    public function imagelikes(){
+        return $this->hasMany('App\ImageLikes');
     }
     public function blog(){
         return $this->hasMany('App\Blog');
     }
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
+
 }

@@ -6,7 +6,10 @@ use App\Gallery;
 use App\Http\Controllers\Articles\TagsController;
 use App\Http\Controllers\Controller;
 use App\Image;
+use App\ImageLikes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -22,8 +25,11 @@ class ImagesController extends Controller
 
     public function show($gallery_name, Image $image)
     {
+        $data=['image'=>$image];
+        $like=Auth::user()?Auth::user()->imagelikes()->where('image_id',$image->id)->first() ? Auth::user()->imagelikes()->where('image_id',$image->id)->first()->like  :null:null;
+        $data=Arr::add($data,'like',$like);
 
-        return view('images.show')->with('image',$image);
+        return view('images.show',$data);
     }
 
 
@@ -103,5 +109,39 @@ class ImagesController extends Controller
             $newimage->save();
             return $newimage;
         }
+    public function addLike(Request $request)
+    {
+
+        if (Auth::user()) {
+            $like = ImageLikes::where([
+                ['image_id', '=', $request->id],
+                ['user_id', '=', Auth::user()->id],
+            ])->first();
+
+            if ($like === null) {
+                ImageLikes::create([
+                    'user_id' => Auth::user()->id,
+                    'image_id' => $request->id,
+                    'like' => $request->isLike,
+                ]);
+            } else {
+
+                if (isset($request->isLike) && $like->like != $request->isLike) {
+                    $like->delete();
+
+                    ImageLikes::create([
+                        'user_id' => Auth::user()->id,
+                        'image_id' => $request->id,
+                        'like' => $request->isLike,
+                    ]);
+                } else {
+
+                    $like->delete();
+                }
+            }
+
+
+        }
+    }
 
 }

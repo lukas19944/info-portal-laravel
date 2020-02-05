@@ -198,6 +198,33 @@ a:active {
 
 
 }
+.comment{
+    margin-top: 20px;
+}
+.panel-heading p{
+    font-weight: bold;
+}
+
+.comment-wrapper .panel-body {
+    /*max-height:650px;*/
+    /*overflow:hidden;*/
+}
+
+.comment-wrapper .media-list .media img {
+    width:64px;
+    height:64px;
+    border:2px solid #e5e7e8;
+}
+
+.comment-wrapper .media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom:25px;
+}
+.like{
+    font-size: 16px;
+    cursor: pointer;
+}
+
 
 
 

@@ -59,12 +59,17 @@ Route::prefix('gallery/{gallery_name}/image')->name('image.')->group(function ()
 
 
 });
+Route::post('image/like','Gallery\ImagesController@addLike')->name('image.like');
 
 Route::resource('/image', 'Gallery\ImagesController',['except'=>['index','edit','show']]);
 
+Route::post('/blog/like', 'Blog\BlogController@addLike')->name('blog.like');
 Route::resource('/blog', 'blog\BlogController');
 
 
-Route::post('/like', 'LikeController@addLike')->name('addLike');
+
+Route::post('/addComment', 'Comments\CommentsController@addComment')->name('comment.add');
+Route::delete('/deletecomment/{comment}', 'Comments\CommentsController@destroy')->name('comment.destroy');
+
 
 

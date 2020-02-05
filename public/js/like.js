@@ -16,7 +16,8 @@ function auth(auth_user){
         $(document).ready(function () {
 
             $('.like').on('click', function (event) {
-                // event.preventDefault();
+                event.preventDefault();
+                object=event.target.classList[1];
 
                 id = event.target.dataset['id'];
 
@@ -25,7 +26,7 @@ function auth(auth_user){
                 var value = i.classList.value;
 
                 sibling = event.target.previousElementSibling == null ? event.target.nextElementSibling : event.target.previousElementSibling;
-                console.log(sibling.children[0]);
+
 
                 $.ajax({
                     method: 'POST',
