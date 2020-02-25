@@ -4,6 +4,7 @@ use App\Article;
 use App\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ArticlesTableSeeder extends Seeder
 {
@@ -31,6 +32,8 @@ class ArticlesTableSeeder extends Seeder
            'is_auth'=>0,
            'user_id'=>1,
         ]);
+        $first->slug=$first->id.'-'.Str::slug($first->title,'-');
+        $first->save();
         $second=Article::create([
            'title'=>'Nowości w zdrowym odżywianiu',
            'short_description'=>'Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz',
@@ -38,6 +41,8 @@ class ArticlesTableSeeder extends Seeder
            'is_auth'=>0,
            'user_id'=>2,
         ]);
+        $second->slug=$second->id.'-'.Str::slug($second->title,'-');
+        $second->save();
         $third=Article::create([
            'title'=>'Cwiczenia codzienne',
            'short_description'=>'Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz',
@@ -45,6 +50,9 @@ class ArticlesTableSeeder extends Seeder
            'is_auth'=>0,
            'user_id'=>3,
         ]);
+        $third->slug=$third->id.'-'.Str::slug($third->title,'-');
+        $third->save();
+
         $first->tags()->attach([
             0=>$sportTag->id,
             1=>$zdrowieTag->id

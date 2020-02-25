@@ -7,18 +7,23 @@ use App\Http\Controllers\Articles\TagsController;
 use App\Http\Controllers\Controller;
 use App\Image;
 use App\Tag;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use mysql_xdevapi\Exception;
 
 
 class GalleriesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['only'=>['create','store','edit','update','destroy','addImage']]);
+
+        $this->middleware('hasrole:admin,author',['only'=>['create','store','edit','update','destroy','addImage']]);
+
     }
+
 
     /**
      * Display a listing of the resource.
@@ -27,6 +32,8 @@ class GalleriesController extends Controller
      */
     public function index()
     {
+
+        $this->middleware('hasrole:admin');
         $galleries=Gallery::all();
         return view('gallery.index')->with('galleries',$galleries);
     }
@@ -92,6 +99,7 @@ class GalleriesController extends Controller
      */
     public function show(Gallery $gallery)
     {
+
         return view('gallery.show')->with('gallery', $gallery);
     }
 
@@ -121,28 +129,44 @@ class GalleriesController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
+        if (!Gate::allows('owner-or-admin', $gallery->user_id)){
+            abort(401,'You do not have permission');
+        }
         $images=$gallery->images()->get();
         $directory="public/uploads/gallery/";
-//        $filenames=$gallery->images()->pluck('title')->toArray();
+
+
         foreach ($images as $image) {
             $image->tags()->detach();
+            $image->imagelikes()->delete();
 
             $filenames[]=$directory.$image->title;
         }
 
-
         Storage::delete($filenames);
+
         $gallery->images()->delete();
         $gallery->tags()->detach();
         $gallery->delete();
         return redirect(route('gallery.index'));
     }
-    public function addImage($gallery,Request $request){
+    public function addImage($gallery){
 
-        $gallery_id=$request->id;
+        $id=strstr($gallery,'-',true);
+        $gallery = Gallery::where('id', $id)->first();
+
+        if (!$gallery){
+            abort(404);
+
+        }
+        if (!Gate::allows('owner-or-admin', $gallery->user_id)){
+            abort(401,'You do not have permission');
+        }
+
+
         return view('images.add')
-            ->with('gallery', $gallery)
-            ->with('gallery_id',$gallery_id);
+            ->with('gallery', $gallery);
+
 
 
 

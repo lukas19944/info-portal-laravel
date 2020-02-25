@@ -28,7 +28,7 @@ class Blog extends Model
         return $this->belongsToMany('App\Gallery');
     }
     public function bloglikes(){
-        return $this->belongsTo('App\BlogLikes','like');
+        return $this->hasMany('App\BlogLikes');
     }
     public function comments(){
         return $this->hasMany('App\Comment','blog_id');

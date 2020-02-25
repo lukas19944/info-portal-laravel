@@ -5,6 +5,7 @@ use App\Gallery;
 use App\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GalleriesTableSeeder extends Seeder
 {
@@ -31,14 +32,22 @@ class GalleriesTableSeeder extends Seeder
            'name'=>'Sport',
            'user_id'=>1,
         ]);
+        $sportGallery->slug=$sportGallery->id.'-'.Str::slug($sportGallery->name,'-');
+        $sportGallery->save();
+
         $zdrowieGallery=Gallery::create([
            'name'=>'Zdrowie',
            'user_id'=>2,
         ]);
+        $zdrowieGallery->slug=$zdrowieGallery->id.'-'.Str::slug($zdrowieGallery->name,'-');
+        $zdrowieGallery->save();
+
         $wakacjeGallery=Gallery::create([
            'name'=>'Wakacje',
             'user_id'=>3,
         ]);
+        $wakacjeGallery->slug=$wakacjeGallery->id.'-'.Str::slug($wakacjeGallery->name,'-');
+        $wakacjeGallery->save();
 
         $sportGallery->tags()->attach($sportTag);
         $zdrowieGallery->tags()->attach($zdrowieTag);

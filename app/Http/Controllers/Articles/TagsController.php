@@ -15,12 +15,14 @@ class TagsController extends Controller
         $articles=$tag->articles()->get();
         $galleries=$tag->galleries()->get();
         $images=$tag->images()->get();
+        $blog=$tag->blogs()->get();
 
         $data=[
             'tags'=>$tag,
             'articles'=>$articles,
             'galleries'=>$galleries,
-            'images'=>$images
+            'images'=>$images,
+            'blogs'=>$blog
         ];
 
         return view('tag.showByTag', $data);

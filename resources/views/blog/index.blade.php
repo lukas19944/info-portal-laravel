@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title',' - Blog')
 @section('content')
     <div class="blog-nav">
         <a class="blog-link" href="{{route('blog.create')}}">Create article</a>

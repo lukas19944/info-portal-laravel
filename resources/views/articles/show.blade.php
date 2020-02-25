@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@section('title', " - $article->title")
+@section('meta')
+    <meta name="description" content="{{$article->short_description}}"/>
+    @foreach($article->tags as $keywords)
+        <meta name="keywords" content="{!!$keywords->name!!}"/>
+    @endforeach
+@stop
 @section('content')
 
     <div class="article">

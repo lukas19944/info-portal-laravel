@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ImagesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('hasrole:admin,author',['only'=>['store','edit','update','destroy']]);
+
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +44,7 @@ class ImagesController extends Controller
      * @param  \App\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function edit($gallery_name,Image $image)
+    public function edit($slug,Image $image)
     {
 
         return view('images.edit')->with('image', $image);
@@ -82,7 +87,8 @@ class ImagesController extends Controller
     public function store(Request $request){
 
             $request->validate([
-                'images.*'=>'required|mimes:jpg,jpeg,bmp,png,gif|max:5000',
+                'images'=>'required',
+                'images.*'=>'mimes:jpg,jpeg,bmp,png,gif|max:5000',
                 'tags'=>'max:20',
             ]);
 

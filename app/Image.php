@@ -15,6 +15,6 @@ class Image extends Model
         return $this->belongsToMany('App\Tag','images_tag');
     }
     public function imagelikes(){
-        return $this->belongsTo('App\ImageLikes','like');
+        return $this->hasMany('App\ImageLikes');
     }
 }

@@ -12,7 +12,8 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('hasrole:admin',['only'=>['edit','update','destroy']]);
+
     }
     /**
      * Display a listing of the resource.
@@ -35,7 +36,7 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        if(Gate::denies('edit-users')){
+        if(Gate::denies('manage-users')){
             return redirect(route('admin.users.index'));
         }
         $roles=Role::all();
@@ -55,7 +56,9 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
+        if(Gate::denies('manage-users')){
+            return redirect(route('admin.users.index'));
+        }
         $user->roles()->sync($request->roles);
 
 
@@ -74,7 +77,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        if(Gate::denies('delete-users')){
+        if(Gate::denies('manage-users')){
             return redirect(route('admin.users.index'));
         }
         $user->roles()->detach();

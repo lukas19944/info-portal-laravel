@@ -50,10 +50,10 @@ Route::namespace('Articles')->group(function() {
 
 Route::get('articles/tag/{name}', 'Articles\TagsController@showByTag')->name('articles.tag.showByTag');
 
-Route::get('gallery/{name}/addimage','Gallery\GalleriesController@addImage')->name('gallery.addimage');
+Route::get('gallery/{gallery_name}/addimage','Gallery\GalleriesController@addImage')->name('gallery.addimage');
 Route::resource('/gallery', 'Gallery\GalleriesController',['except'=>['edit','update']]);
 
-Route::prefix('gallery/{gallery_name}/image')->name('image.')->group(function (){
+Route::prefix('gallery/{slug}/image')->name('image.')->group(function (){
     Route::get('{image}','Gallery\ImagesController@show')->name('show');
     Route::get('{image}/edit', 'Gallery\ImagesController@edit')->name('edit');
 
@@ -70,6 +70,7 @@ Route::resource('/blog', 'blog\BlogController');
 
 Route::post('/addComment', 'Comments\CommentsController@addComment')->name('comment.add');
 Route::delete('/deletecomment/{comment}', 'Comments\CommentsController@destroy')->name('comment.destroy');
-
+Route::get('/comment/list','Comments\CommentsController@commentList')->name('comment.list');
+Route::get('/comment/{comment}/confirm','Comments\CommentsController@confirmComment')->name('comment.confirm');
 
 

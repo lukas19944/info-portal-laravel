@@ -9,6 +9,7 @@ use App\Tag;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
@@ -19,7 +20,7 @@ class ArticlesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['only'=>['create','edit','update','store','destroy']]);
+        $this->middleware('hasrole:admin,author',['only'=>['create','edit','update','store','destroy']]);
     }
 
     /**
@@ -106,9 +107,11 @@ class ArticlesController extends Controller
         if (Gate::allows('owner-or-admin', $article->user_id)) {
 
             $data = ['article' => $article];
+
             if (Gallery::where('user_id', $article->users->id)->get() !== null) {
                 $galleries = Gallery::where('user_id', $article->users->id)->get();
-                $data = ['article' => $article, 'galleries' => $galleries];
+                $data=Arr::add($data,'galleries',$galleries);
+
             }
 
             return view('articles.edit', $data);
@@ -132,26 +135,24 @@ class ArticlesController extends Controller
         if(Gate::allows('owner-or-admin',$article->user_id)){
 
             $request->validate([
-                'title'=>'required|unique:articles,title|max:60',
+                'title'=>'required|max:60',
                 'article_content'=>'required',
                 'tags'=>'string'
             ]);
-        $article->title = $request->title;
-        $article->content = $request->article_content;
-        $article->short_description = strip_tags(Str::limit($request->article_content, 30));
-        $article->is_auth=isset($request->only_for_registered) ? 1 : 0;
-        $article->user_id = Auth::id();
-        $article->save();
+            $article->title = $request->title;
+            $article->content = $request->article_content;
+            $article->short_description = strip_tags(Str::limit($request->article_content, 30));
+            $article->is_auth=isset($request->only_for_registered) ? 1 : 0;
+            $article->user_id = Auth::id();
+            $article->update();
 
-        TagsController::addTag($request->tags,$article);
-
-
+            TagsController::addTag($request->tags,$article);
 
             ArticlesController::addGallery($article,$request->selected_gallery);
 
-        return redirect(route('articles.index'));
-    }
-    return redirect()->back();
+            return redirect(route('articles.index'));
+        }
+        return redirect()->back();
     }
 
     /**
@@ -166,11 +167,12 @@ class ArticlesController extends Controller
 
 
             $article->is_activ = 0;
-            $article->save();
+            $article->update();
             return redirect(route('articles.index'));
         }
         return redirect()->back();
     }
+
     public static function addGallery(Article $article, $gallery_id){
 
         if ($article->galleries()->first()!==null){

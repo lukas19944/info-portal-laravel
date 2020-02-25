@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@section('title', " - $blog->title")
+@section('meta')
+    <meta name="description" content="{{$blog->short_content}}"/>
+    @foreach($blog->tags as $keywords)
+    <meta name="keywords" content="{!!$keywords->name!!}"/>
+    @endforeach
+@stop
 @section('content')
 
     <div class="blog-show">
@@ -43,11 +49,15 @@
         <div class="tag" id="tag"><a href="{{route('articles.tag.showByTag', $tag->name)}}">{{$tag->name}}</a></div>
             @endforeach
     </div>
+        <div class="like-counter row">
+            <p class="likes">Like: {{$likes}}</p>
+            <p class="dislikes">Dislike: {{$dislikes}}</p>
+        </div>
         <div class="interaction">
 {{--            <a href="#" class="like" data-id="{{$blog->id}}">{!! Auth::user()->likes()->where('blog_id',$blog->id)->first() ?Auth::user()->likes()->where('blog_id',$blog->id)->first()->like==1?'<i class="fa fa-thumbs-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>'!!}Like</a>--}}
-            <span onclick="auth({{Auth::user()}})" class="like" data-id="{{$blog->id}}">{!! $like===1?'<i class="fa fa-thumbs-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>' !!}Like</span>
-            <span onclick="auth({{Auth::user()}})" class="like" data-id="{{$blog->id}}">{!! $like===0?'<i class="fa fa-thumbs-down" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>' !!}Like</span>
-
+            <span class="like" data-id="{{$blog->id}}">{!! $like===1?'<i class="fa fa-thumbs-up" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>' !!}Like</span>
+            <span class="like" data-id="{{$blog->id}}">{!! $like===0?'<i class="fa fa-thumbs-down" aria-hidden="true"></i>':'<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>' !!}Like</span>
+{{--            onclick="addLike()"--}}
         </div>
         <div class="comment">
             <div class="row bootstrap snippets">
@@ -63,37 +73,50 @@
                                 <p>Comments</p>
                             </div>
                             <div class="panel-body">
-                            @auth()
                                 <form action="{{route('comment.add',['id'=>$blog->id])}}" method="post">
+                                    @guest()
+                                        <input name="nick" type="text" class="form-control" placeholder="Your nick">
+                                    @endguest
                                         <textarea class="form-control" name="contents" placeholder="write a comment..." rows="3"></textarea>
                                         <br>
                                     @csrf
                                         <button type="submit" class="btn btn-info pull-right">Post</button>
+
                                 </form>
-                            @endauth
                                 <div class="clearfix"></div>
 
                                 <ul class="media-list">
                             @foreach($comments as $comment)
+
                                 <hr>
                                     <li class="media">
                                         <a href="#" class="pull-left">
+                                            @if($comment->user()->first())
                                             <img src="{{asset("storage/uploads/users/avatar/".$comment->user->avatar)}}" alt="" class="img-circle">
+                                            @else
+                                                <img src="{{asset("storage/uploads/users/avatar/users.png")}}" alt="" class="img-circle">
+                                            @endif
                                         </a>
                                         <div class="media-body">
+                                            @can('delete-comments', [$blog->user_id,$comment->user_id])
                                     <span class="text-muted pull-right">
                                         <small class="text-muted">{{$comment->created_at}}</small>
-                                        @can('owner-or-admin', $comment->user_id)
+
                                         <div class="delete-link">
-                                            <form action="{{route('comment.destroy', $comment)}}" method="POST">
+                                            <form action="{{route('comment.destroy', [$comment,'blog'=>$blog->id])}}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger pull-right">X</button>
                                             </form>
                                         </div>
-                                            @endcan
+
                                     </span>
-                                            <strong class="text-success">{{$comment->user->name}}</strong>
+                                            @endcan
+                                            @if($comment->user()->first())
+                                                <a href=""><strong class="text-success">{{$comment->user->name}}</strong></a>
+                                            @else
+                                                <strong class="text-success">{{$comment->nick}}</strong>
+                                            @endif
                                             <p>
                                                 {{$comment->contents}}
                                             </p>
@@ -120,6 +143,7 @@
     <script type="text/javascript">
         var token="{{ csrf_token() }}";
         var urlLike = '{{route('blog.like')}}';
+        var auth_user='{{Auth::user()}}';
 
 
     </script>

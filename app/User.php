@@ -57,6 +57,9 @@ class User extends Authenticatable
 
         return false;
     }
+    public function getRole(){
+        return Auth::user()->roles()->pluck('name')->first();
+    }
 
     public function articles(){
         return $this->hasMany('App\Article');

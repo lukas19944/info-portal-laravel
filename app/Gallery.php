@@ -8,7 +8,7 @@ class Gallery extends Model
 {
     public function getRouteKeyName()
     {
-        return 'name';
+        return 'slug';
     }
     public function articles(){
         return $this->belongsToMany('App\Article', 'article_gallery');

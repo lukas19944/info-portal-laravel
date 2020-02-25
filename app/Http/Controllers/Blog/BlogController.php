@@ -80,6 +80,8 @@ class BlogController extends Controller
 
         $data=['blog'=>$blog];
 
+        $data=Arr::add($data,'likes',$blog->bloglikes()->where('like',1)->get()->count());
+        $data=Arr::add($data,'dislikes',$blog->bloglikes()->where('like',0)->get()->count());
 
         if ($blog->galleries->first()!==null) {
             $gallery=$blog->galleries()->first();
@@ -91,7 +93,7 @@ class BlogController extends Controller
         $like=Auth::user()?Auth::user()->bloglikes()->where('blog_id',$blog->id)->first() ? Auth::user()->bloglikes()->where('blog_id',$blog->id)->first()->like  :null:null;
         $data=Arr::add($data,'like',$like);
 //        if ($blog->comments()->get()->isNotEmpty()){
-            $data=Arr::add($data,'comments',$blog->comments()->get());
+            $data=Arr::add($data,'comments',$blog->comments()->where('confirmed',1)->get());
 
 //        }
 
@@ -183,34 +185,45 @@ class BlogController extends Controller
     {
 
         if (Auth::user()) {
+
+            $update=false;
+
             $like = BlogLikes::where([
                 ['blog_id', '=', $request->id],
                 ['user_id', '=', Auth::user()->id],
             ])->first();
 
-            if ($like === null) {
-                BlogLikes::create([
-                    'user_id' => Auth::user()->id,
-                    'blog_id' => $request->id,
-                    'like' => $request->isLike,
-                ]);
-            } else {
 
-                if (isset($request->isLike) && $like->like != $request->isLike) {
+
+            if ($like) {
+
+                $update = true;
+                $actually_like = $like->like;
+                if ($actually_like == $request->isLike) {
+                    Log::info($actually_like == $request->isLike);
+                    Log::info('b');
                     $like->delete();
-
-                    BlogLikes::create([
-                        'user_id' => Auth::user()->id,
-                        'blog_id' => $request->id,
-                        'like' => $request->isLike,
-                    ]);
-                } else {
-
-                    $like->delete();
+                    return null;
                 }
+            }else{
+
+                $like=new BlogLikes();
+
             }
 
+            $like->blog_id=$request->id;
+            $like->user_id=Auth::user()->id;
+            $like->like=$request->isLike;
+            if ($update){
+                $like->update();
+
+            }else{
+                $like->save();
+
+            }
+
+            }
 
         }
-    }
+
 }

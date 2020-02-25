@@ -10,7 +10,7 @@ class Article extends Model
 {
     public function getRouteKeyName()
     {
-        return 'title';
+        return 'slug';
     }
     public function users(){
         return $this->belongsTo('App\User', 'user_id');

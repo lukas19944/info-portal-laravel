@@ -51,7 +51,7 @@
                                 <input type="text" name="tags"  id="tags" data-role="tagsinput" class="col-md-8 form-control" >
 
                             </div>
-                            <input type="hidden" name="gallery_id" value="{{$gallery_id}}">
+                            <input type="hidden" name="gallery_id" value="{{$gallery->id}}">
 
                             <button type="submit" class="btn btn-primary float-right">Create gallery</button>
 

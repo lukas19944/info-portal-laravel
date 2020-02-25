@@ -8,7 +8,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @section('meta')
+    <meta name="description" content="Portal informacyjny zawierający artykuły, galerie zdjęć oraz bloga"/>
+    @show
+
+    <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
     @section('js')
     <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -27,12 +31,10 @@
     <!-- Styles -->
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
      <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-
-
-
+     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
     @show
+
 
 </head>
 
@@ -74,18 +76,21 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+
                                     @can('manage-users')
                                     <a class="dropdown-item" href="{{ route('admin.users.index') }}">User Managment</a>
                                     @endcan
                                     @auth()
                                     <a class="dropdown-item" href="{{ route('users.profile.index',Auth::user()->name) }}">Profile</a>
                                     @endauth
-
+                                    @can('manage-comments')
+                                        <a class="dropdown-item" href="{{ route('comment.list') }}">Manage comments</a>
+                                    @endcan
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
